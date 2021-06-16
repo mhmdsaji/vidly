@@ -1,45 +1,64 @@
 import React, { Component } from "react";
-import Table from "./common/table";
-import Like from "./common/like";
+import auth from "../services/authService";
 import { Link } from "react-router-dom";
+import { getGenreName } from "../services/genreService";
+import Like from "./common/like";
+import Table from "./common/table";
 
 class MoviesTable extends Component {
-  // Class property
-  // It will not change throughout the entire application execution
   columns = [
     {
       path: "title",
       label: "Title",
-      content: movie => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      content: (movie) => <Link to={`/movies/${movie.id}`}>{movie.title}</Link>,
     },
-    { path: "genre.name", label: "Genre" },
-    { path: "numberInStock", label: "Stock" },
-    { path: "DailyRentalRate", label: "Rate" },
     {
-      key: "Like",
-      content: movie => (
+      key: "Genre",
+      content: (movie) => {
+        return (
+          <ul>
+            {movie.genre_ids.map((genre) => (
+              <li key={genre}>{getGenreName(this.props.genres, genre)}</li>
+            ))}
+          </ul>
+        );
+      },
+    },
+    { path: "release_date", label: "Release Date" },
+    { path: "vote_average", label: "Rate" },
+    {
+      key: "like",
+      content: (movie) => (
         <Like liked={movie.liked} onClick={() => this.props.onLike(movie)} />
-      )
+      ),
     },
-    {
-      key: "Delete",
-      content: movie => (
-        <button
-          onClick={() => this.props.onDelete(movie)}
-          className="btn btn-danger"
-        >
-          Delete
-        </button>
-      )
-    }
   ];
-  render() {
-    const { moviesInPage, sortColumn, onSort } = this.props;
 
+  deleteColumn = {
+    key: "delete",
+    content: (movie) => (
+      <button
+        onClick={() => this.props.onDelete(movie)}
+        className='btn btn-danger btn-sm'>
+        Delete
+      </button>
+    ),
+  };
+
+  getMovieGenresNames = (movie) => {};
+
+  constructor() {
+    super();
+    const user = auth.getCurrentUser();
+    if (user && user.isAdmin) this.columns.push(this.deleteColumn);
+  }
+
+  render() {
+    const { movies, sortColumn, onSort } = this.props;
     return (
       <Table
         columns={this.columns}
-        data={moviesInPage}
+        data={movies}
         sortColumn={sortColumn}
         onSort={onSort}
       />
