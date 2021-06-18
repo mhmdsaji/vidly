@@ -2,7 +2,7 @@ import http from "./httpService";
 import { apiUrl, apiKey } from "../config.json";
 
 export function getGenres() {
-  return http.get(apiUrl + "/genre/movie/list?api_key=" + apiKey);
+  return http.get(`${apiUrl}/genre/movie/list?api_key=${apiKey}`);
 }
 
 export function getGenreName(genres, genre_id) {

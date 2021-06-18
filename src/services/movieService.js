@@ -1,7 +1,7 @@
 import http from "./httpService";
 import { apiUrl, apiKey } from "../config.json";
 
-const apiEndpoint = apiUrl + "/movie/top_rated?api_key=" + apiKey;
+const apiEndpoint = `${apiUrl}/movie/top_rated?api_key=${apiKey}`;
 
 function movieUrl(id) {
   return `${apiEndpoint}/${id}?api_key=${apiKey}`;
