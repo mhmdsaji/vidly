@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import auth from "../services/authService";
 import { Link } from "react-router-dom";
 import { getGenreName } from "../services/genreService";
-import Like from "./common/like";
-import Table from "./common/table";
+import Like from "./common/Like";
+import Table from "./common/Table";
 
 class MoviesTable extends Component {
   columns = [
